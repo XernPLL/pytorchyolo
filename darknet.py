@@ -86,7 +86,7 @@ class Darknet(nn.Module):
                     detections = torch.cat((detections, x), 1)
 
             outputs[idx] = x
-        print(detections.size())
+
         return detections
 
     def load_weights(self, weightfile):
@@ -200,7 +200,7 @@ def load_cfg(cfgfile):
             block[key.rstrip()] = value.lstrip()
 
     blocks.append(block)
-    print(blocks)
+
     return blocks
 
 def create_modules(blocks):
@@ -243,12 +243,12 @@ def create_modules(blocks):
 
         elif x["type"] == "upsample":
             stride = int(x["stride"])
-            upsample = nn.Upsample(scale_factor = stride, mode = "bilinear", align_corners=True) ## TOCHECK
+            upsample = nn.Upsample(scale_factor = stride, mode = "bilinear", align_corners=False) ## TOCHECK
             module.add_module("upsample_{0}".format(idx), upsample)
 
         elif x["type"] == "route":
             x["layers"] = [int(route) for route in x["layers"].split(',')]
-            """
+
 
             start = int(x["layers"][0])
 
@@ -263,15 +263,15 @@ def create_modules(blocks):
                 end = end - idx
             """
             filters = sum([output_filters[route] for route in x['layers']]) ### ???
-
+            """
             route = EmptyLayer()
             module.add_module("route_{0}".format(idx), route)
-            """
+
             if end < 0:
                 filters = output_filters[idx + start] + output_filters[idx + end]
             else:
                 filters = output_filters[idx + start]
-            """
+
 
         elif x["type"] == "shortcut": # skip connection
             shortcut = EmptyLayer()
@@ -294,7 +294,7 @@ def create_modules(blocks):
         output_filters.append(filters)
 
     return(net_info,module_list)
-
+"""
 CUDA = torch.cuda.is_available()
 model = Darknet("cfg/yolov3.cfg")
 if CUDA:
@@ -303,3 +303,4 @@ inp = get_test_input()
 pred = model(inp, CUDA)
 
 model.load_weights("yolov3.weights")
+"""
