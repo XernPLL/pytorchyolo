@@ -249,7 +249,7 @@ def create_modules(blocks):
         elif x["type"] == "route":
             x["layers"] = [int(route) for route in x["layers"].split(',')]
 
-
+            """
             start = int(x["layers"][0])
 
             try:
@@ -271,7 +271,7 @@ def create_modules(blocks):
                 filters = output_filters[idx + start] + output_filters[idx + end]
             else:
                 filters = output_filters[idx + start]
-
+            """
 
         elif x["type"] == "shortcut": # skip connection
             shortcut = EmptyLayer()

@@ -148,6 +148,7 @@ def write_results(prediction, confidence, num_classes, nms_conf=0.4):
             image_pred_class = image_pred_class[conf_sort_index]
             idx = image_pred_class.size(0)  # Number of detections
 
+
             for i in range(idx):
                 # Get the IOUs of all boxes that come after the one we are looking at
                 # in the loop
